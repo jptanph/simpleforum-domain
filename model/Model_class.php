@@ -144,4 +144,16 @@ class Model_class
 		$sSql = "SELECT * FROM $this->_FORUM_REGISTRATION WHERE idx = $iIdx";
 		return $this->_oSql->execQuery($sSql,true);		
 	}
+	
+	public function get_account_info()
+	{
+		$sSql = "SELECT * FROM $this->_FORUM_REGISTRATION WHERE username LIKE '" . getVar('userid').  "%'";
+		return $this->_oSql->execQuery($sSql,true);				
+	}	
+	
+	public function get_question_info()
+	{
+		$sSql = "SELECT * FROM $this->_FORUM_REGISTRATION WHERE username answer = '" . getVar('q_answer').  "'";
+		return $this->_oSql->execQuery($sSql,true);				
+	}		
 }

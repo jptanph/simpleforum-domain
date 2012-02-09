@@ -2,7 +2,6 @@
 
 require_once($_SERVER['DOCUMENT_ROOT'] . '/lib/environment.php');
 require_once('/model/Model_class.php');
-
 class Index
 {
 	private $_oModel;
@@ -59,6 +58,10 @@ class Index
 			
 			case'view':
 				$this->_execViewPost();
+			break;
+			
+			case'recoveraccount':
+				$this->_execRecoverAccount();
 			break;
 		}
 	}
@@ -243,6 +246,35 @@ class Index
 		$aResult = $this->_oModel->get_user_info($iIdx);
 		
 		return ($aResult) ? $aResult[0]['full_name'] : '';
+	}
+	
+	private function _execRecoverAccount()
+	{
+		$aResult = array();
+		if(getVar('type')=='userid')
+		{
+			$aData = $this->_oModel->get_account_info();																	
+			foreach($aData as $rows)
+			{
+				$aResult['list'][] = array(
+					'username' => limitChar($rows['username'],3)
+				);
+			}
+		}
+		elseif(getVar('type')=='question')
+		{
+			$aData = $this->_oModel->get_question_info();
+			if($aData)
+			{
+				$aResult['list'] = 'error';
+			}
+			else
+			{
+				$aResult['list'] = 'ok';			
+			}
+		}
+		$aResult['type'] = getVar('type'); 
+		echo $this->_execJsonp($aResult);			
 	}
 	
 	private function _execJsonp($aData)
