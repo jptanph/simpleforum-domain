@@ -56,8 +56,19 @@ class Index
 				$this->_execDeleteUserReply();
 			break;
 			
+			case'viewuserpost':
+				$this->_execViewUserPost();
+			break;
+			
+			case'updateuserpost':
+				$this->_execUpdateUserPost();
+			break;
 			case'view':
 				$this->_execViewPost();
+			break;
+			
+			case'saveuserpost':
+				$this->_execSaveUserPost();
 			break;
 			
 			case'recoveraccount':
@@ -80,9 +91,9 @@ class Index
 			$aReply = $this->_execLastReply($rows['idx']);
 			$aReplyCount = $this->_oModel->get_reply_count($rows['idx']);
 			$iReplyCount = count($aReplyCount);
-			$aData['list'][]= array(
+			$aData['list'][]= array(	
 				'idx' => $rows['idx'],
-				'full_name' => $rows['full_name'],
+				'full_name' => ($rows['user_idx']==0) ? $rows['full_name'] : $this->_execUserInfo($rows['user_idx']),
 				'password' => $rows['password'],
 				'subject' => $rows['subject'],
 				'message' => $rows['message'],
@@ -236,7 +247,7 @@ class Index
 		$this->_oModel->delete_user_reply();
 		$aCount = $this->_oModel->get_reply_count(getVar('parent_idx'));
 		$iReplyCount = count($aCount);		
-		$aData = array('status' => 'ok','last_page' => ceil($iReplyCount/$this->_iLimitReply));
+		$aData = array('status' => 'ok','last_page' => ceil($iReplyCount/$this->_iLimitReply),'total_count'=>$iReplyCount);
 		echo $this->_execJsonp($aData);			
 	}
 	
@@ -275,6 +286,27 @@ class Index
 		}
 		$aResult['type'] = getVar('type'); 
 		echo $this->_execJsonp($aResult);			
+	}
+	
+	public function _execViewUserPost()
+	{
+		$aResult = $this->_oModel->view_user_post();
+		$aData['message'] = $aResult[0]['message'];
+		echo $this->_execJsonp($aData);	
+	}
+	
+	public function _execSaveUserPost()
+	{
+		$this->_oModel->insert_user_post();
+		$aData = array('status' => 'ok');
+		echo $this->_execJsonp($aData);	
+	}
+	
+	public function _execUpdateUserPost()
+	{
+		$this->_oModel->update_user_post();
+		$aData = array('status' => 'ok');
+		echo $this->_execJsonp($aData);	
 	}
 	
 	private function _execJsonp($aData)

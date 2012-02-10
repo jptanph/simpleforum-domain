@@ -155,5 +155,26 @@ class Model_class
 	{
 		$sSql = "SELECT * FROM $this->_FORUM_REGISTRATION WHERE username answer = '" . getVar('q_answer').  "'";
 		return $this->_oSql->execQuery($sSql,true);				
-	}		
+	}	
+
+	public function insert_user_post()
+	{
+		$sSql = "INSERT INTO $this->_FORUM_POST
+			(user_idx,subject,message,show_smiley,date_posted)
+			VALUES
+			(" . getVar('idx') . ",'" . getVar('subject') . "','" . getVar('message') . "','" . getVar('show_smiley') . "',UNIX_TIMESTAMP(NOW()))";
+		return $this->_oSql->execQuery($sSql,false);	
+	}
+	
+	public function view_user_post()
+	{
+		$sSql = "SELECT * FROM $this->_FORUM_POST WHERE idx = " .  getVar('idx');
+		return $this->_oSql->execQuery($sSql,true);		
+	}
+	
+	public function update_user_post()
+	{
+		$sSql = "UPDATE $this->_FORUM_POST SET message = '" . getVar('message') . "' WHERE idx = " . getVar('idx');
+		return $this->_oSql->execQuery($sSql,false);		
+	}	
 }
