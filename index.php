@@ -2,6 +2,7 @@
 
 require_once($_SERVER['DOCUMENT_ROOT'] . '/lib/environment.php');
 require_once('/model/Model_class.php');
+
 class Index
 {
 	private $_oModel;
@@ -274,14 +275,16 @@ class Index
 		}
 		elseif(getVar('type')=='question')
 		{
-			$aData = $this->_oModel->get_question_info();
+			//$aData = $this->_oModel->get_question_info();
+			$aData = $this->_oModel->get_username_info();
 			if($aData)
 			{
-				$aResult['list'] = 'error';
+				$aResult['list'] = 'ok';
+				$aResult['question_list'] = $this->_oModel->get_questions();
 			}
 			else
 			{
-				$aResult['list'] = 'ok';			
+				$aResult['list'] = 'error';			
 			}
 		}
 		$aResult['type'] = getVar('type'); 

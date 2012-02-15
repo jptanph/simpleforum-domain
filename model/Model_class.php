@@ -153,9 +153,15 @@ class Model_class
 	
 	public function get_question_info()
 	{
-		$sSql = "SELECT * FROM $this->_FORUM_REGISTRATION WHERE username answer = '" . getVar('q_answer').  "'";
+		$sSql = "SELECT * FROM $this->_FORUM_REGISTRATION WHERE answer = '" . getVar('q_answer').  "'";
 		return $this->_oSql->execQuery($sSql,true);				
 	}	
+	
+	public function get_username_info()
+	{
+		$sSql = "SELECT * FROM $this->_FORUM_REGISTRATION WHERE username = '" . getVar('userid').  "'";
+		return $this->_oSql->execQuery($sSql,true);					
+	}
 
 	public function insert_user_post()
 	{
